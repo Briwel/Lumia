@@ -1,0 +1,8 @@
+{
+  "name": "Lumina Immo",
+  "description": "Plateforme immobilière moderne assistée par IA pour la recherche et la vente de biens.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}
