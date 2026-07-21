@@ -26,6 +26,8 @@ export interface Property {
   description: string;
   features: string[];
   isPromoted?: boolean; // Nouveau champ pour la monétisation
+  agentName?: string;   // Propriété sécurisée du créateur
+  agencyName?: string;  // Agence du créateur
   contract?: {
     type: 'upload' | 'template';
     name: string;

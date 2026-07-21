@@ -5,6 +5,8 @@ import { PropertyCard } from './components/PropertyCard';
 import { AIChat } from './components/AIChat';
 import { AgentDashboard } from './components/AgentDashboard';
 import { AgentAuth } from './components/AgentAuth';
+import { SuperAdminDashboard } from './components/super-admin/SuperAdminDashboard';
+import { WelcomeScreen } from './components/WelcomeScreen';
 import api from './services/api';
 import { COUNTRIES } from './constants';
 import { 
@@ -30,9 +32,10 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { Property, CountryCode } from './types';
+import { BlurText } from './components/animations/BlurText';
 
 const App: React.FC = () => {
-  const [activeView, setActiveView] = useState<'home' | 'add' | 'details' | 'agent'>('home');
+  const [activeView, setActiveView] = useState<'welcome' | 'home' | 'add' | 'details' | 'agent'>('welcome');
   const [currentCountry, setCurrentCountry] = useState<CountryCode>('BJ');
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
@@ -44,6 +47,7 @@ const App: React.FC = () => {
   
   const [isAgentAuthenticated, setIsAgentAuthenticated] = useState(false);
   const [agentName, setAgentName] = useState('');
+  const [userRole, setUserRole] = useState<'agent' | 'super_admin'>('agent');
 
   // Contact Modal State
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -67,8 +71,10 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const savedAgent = localStorage.getItem('agentName');
+    const savedRole = localStorage.getItem('userRole') as 'agent' | 'super_admin' | null;
     if (savedAgent) {
       setAgentName(savedAgent);
+      setUserRole(savedRole || 'agent');
       setIsAgentAuthenticated(true);
     }
 
@@ -90,10 +96,12 @@ const App: React.FC = () => {
     }
   }, []);
 
-  const handleLoginSuccess = (name: string) => {
+  const handleLoginSuccess = (name: string, role: 'agent' | 'super_admin') => {
     setAgentName(name);
+    setUserRole(role);
     setIsAgentAuthenticated(true);
     localStorage.setItem('agentName', name);
+    localStorage.setItem('userRole', role);
     setActiveView('agent');
     fetchProperties();
   };
@@ -101,7 +109,9 @@ const App: React.FC = () => {
   const handleLogout = () => {
     setIsAgentAuthenticated(false);
     setAgentName('');
+    setUserRole('agent');
     localStorage.removeItem('agentName');
+    localStorage.removeItem('userRole');
     localStorage.removeItem('auth_token');
     setActiveView('home');
     fetchProperties();
@@ -170,12 +180,24 @@ const App: React.FC = () => {
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-4 text-center mt-10">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-indigo-200 text-sm font-semibold mb-6 animate-fade-in-up">
-            ✨ Immobilier {countryConfig.name} avec Lumina IA
-          </div>
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-8 text-white tracking-tight leading-tight">
-            Réinventez votre recherche <br/> 
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">au {countryConfig.name}</span>
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-8 text-white tracking-tight leading-tight flex flex-col items-center justify-center">
+            <BlurText 
+              text="Réinventez votre recherche" 
+              animateBy="words" 
+              direction="bottom" 
+              duration={0.6}
+              stagger={0.1}
+            />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400 mt-2">
+              <BlurText 
+                text={`${currentCountry === 'BJ' ? 'au' : 'en'} ${countryConfig.name}`} 
+                animateBy="letters" 
+                direction="bottom" 
+                duration={0.8}
+                stagger={0.04}
+                delay={400}
+              />
+            </span>
           </h1>
           
           <div className="bg-white/95 backdrop-blur-xl p-3 rounded-3xl shadow-2xl shadow-indigo-900/20 flex flex-col md:flex-row gap-3 max-w-2xl mx-auto transform transition-all hover:scale-[1.01]">
@@ -386,12 +408,28 @@ const App: React.FC = () => {
       onOpenChat={() => setIsChatOpen(true)}
       currentCountry={currentCountry}
     >
+      {activeView === 'welcome' && (
+        <WelcomeScreen 
+          onExplore={() => {
+            setActiveView('home');
+            window.scrollTo(0, 0);
+          }} 
+          onGoToPro={() => {
+            setActiveView('agent');
+            window.scrollTo(0, 0);
+          }} 
+          onOpenChat={() => setIsChatOpen(true)}
+          currentCountry={currentCountry}
+        />
+      )}
       {activeView === 'home' && renderHome()}
       {activeView === 'details' && renderDetails()}
       {activeView === 'agent' && (
         !isAgentAuthenticated 
           ? <AgentAuth onLoginSuccess={handleLoginSuccess} onBack={() => setActiveView('home')} />
-          : <AgentDashboard agentName={agentName} onLogout={handleLogout} />
+          : userRole === 'super_admin'
+            ? <SuperAdminDashboard adminName={agentName} onLogout={handleLogout} />
+            : <AgentDashboard agentName={agentName} onLogout={handleLogout} />
       )}
       <AIChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
 

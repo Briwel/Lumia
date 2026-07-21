@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Home, MessageCircle, Menu, X, UserCircle } from 'lucide-react';
+import { Home, MessageCircle, Menu, X, UserCircle, Database } from 'lucide-react';
 import { CountryCode } from '../types';
 import { COUNTRIES } from '../constants';
+import { isSupabaseConfigured } from '../services/supabaseClient';
 
 interface LayoutProps {
   children: React.ReactNode;
-  activeView: 'home' | 'add' | 'agent' | 'details';
-  onChangeView: (view: 'home' | 'add' | 'agent' | 'details') => void;
+  activeView: 'welcome' | 'home' | 'add' | 'agent' | 'details';
+  onChangeView: (view: 'welcome' | 'home' | 'add' | 'agent' | 'details') => void;
   onOpenChat: () => void;
   currentCountry: CountryCode;
 }
@@ -31,7 +32,7 @@ export const Layout: React.FC<LayoutProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isTransparentMode = activeView === 'home' && !scrolled;
+  const isTransparentMode = (activeView === 'home' || activeView === 'welcome') && !scrolled;
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 font-sans">
@@ -46,7 +47,7 @@ export const Layout: React.FC<LayoutProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <div className="flex items-center cursor-pointer group" onClick={() => onChangeView('home')}>
+            <div className="flex items-center cursor-pointer group" onClick={() => onChangeView('welcome')}>
               <div className="h-10 w-10 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center mr-3 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
                 <Home className="h-5 w-5 text-white" />
               </div>
@@ -57,6 +58,16 @@ export const Layout: React.FC<LayoutProps> = ({
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-1">
+              <button 
+                onClick={() => onChangeView('welcome')} 
+                className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                  activeView === 'welcome' 
+                    ? 'bg-indigo-600 text-white' 
+                    : isTransparentMode ? 'text-slate-100 hover:bg-white/10' : 'text-slate-600 hover:bg-slate-100'
+                }`}
+              >
+                Accueil
+              </button>
               <button 
                 onClick={() => onChangeView('home')} 
                 className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
@@ -122,6 +133,12 @@ export const Layout: React.FC<LayoutProps> = ({
           </div>
           
           <div className="flex-grow p-6 space-y-2">
+            <button 
+              onClick={() => { onChangeView('welcome'); setMobileMenuOpen(false); }}
+              className={`w-full text-left px-5 py-4 rounded-2xl font-bold transition-all ${activeView === 'welcome' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-50'}`}
+            >
+              Accueil
+            </button>
             <button 
               onClick={() => { onChangeView('home'); setMobileMenuOpen(false); }}
               className={`w-full text-left px-5 py-4 rounded-2xl font-bold transition-all ${activeView === 'home' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600 hover:bg-slate-50'}`}

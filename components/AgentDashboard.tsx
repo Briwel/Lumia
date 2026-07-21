@@ -30,6 +30,10 @@ import {
 } from 'lucide-react';
 import { Property } from '../types';
 import { generatePropertyDescription } from '../services/geminiService';
+import { SpotlightCard } from './animations/SpotlightCard';
+import { ShinyText } from './animations/ShinyText';
+import { CountUp } from './animations/CountUp';
+import { BlurText } from './animations/BlurText';
 
 interface AgentDashboardProps {
   agentName: string;
@@ -252,7 +256,7 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentName, onLog
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-10">
           <div>
-            <h1 className="text-4xl font-extrabold text-slate-900 mb-2">Espace Pro</h1>
+            <BlurText text="Espace Pro Lumina" className="text-4xl font-black text-slate-900 tracking-tight mb-2" delay={100} />
             <p className="text-slate-500 font-medium text-lg italic">Bonjour, {agentName}</p>
           </div>
           
@@ -301,22 +305,44 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentName, onLog
         <div className="min-h-[500px] animate-fade-in">
           {activeTab === 'overview' && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-               <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+               <SpotlightCard className="p-6" spotlightColor="rgba(99, 102, 241, 0.12)">
                   <p className="text-slate-400 font-bold text-xs uppercase mb-2">Actifs</p>
-                  <h3 className="text-3xl font-extrabold">{safeProperties.filter(p => p && p.status === 'available').length}</h3>
-               </div>
-               <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                  <h3 className="text-4xl font-extrabold text-slate-900 tracking-tight">
+                    <CountUp to={safeProperties.filter(p => p && p.status === 'available').length} />
+                  </h3>
+                  <div className="mt-3 flex items-center text-xs text-indigo-500 font-semibold gap-1">
+                    <Building2 className="w-3.5 h-3.5" />
+                    <span>Annonces publiées en ligne</span>
+                  </div>
+               </SpotlightCard>
+
+               <SpotlightCard className="p-6" spotlightColor="rgba(16, 185, 129, 0.12)">
                   <p className="text-slate-400 font-bold text-xs uppercase mb-2">Clôturés</p>
-                  <h3 className="text-3xl font-extrabold text-emerald-600">{safeOperations.length}</h3>
-               </div>
-               <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                  <h3 className="text-4xl font-extrabold text-emerald-600 tracking-tight">
+                    <CountUp to={safeOperations.length} />
+                  </h3>
+                  <div className="mt-3 flex items-center text-xs text-emerald-600 font-semibold gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span>Transactions signées</span>
+                  </div>
+               </SpotlightCard>
+
+               <SpotlightCard className="p-6" spotlightColor="rgba(99, 102, 241, 0.12)">
                   <p className="text-slate-400 font-bold text-xs uppercase mb-2">Chiffre d'affaires</p>
-                  <h3 className="text-3xl font-extrabold text-indigo-600">{totalRevenue.toLocaleString()} FCFA</h3>
-               </div>
-               <div className="bg-gradient-to-br from-indigo-600 to-violet-600 p-6 rounded-3xl shadow-lg text-white relative overflow-hidden group cursor-pointer" onClick={handleBuyCredits}>
+                  <h3 className="text-3xl font-black text-indigo-600 tracking-tight">
+                    <CountUp to={totalRevenue} /> <span className="text-sm font-bold text-slate-500">FCFA</span>
+                  </h3>
+                  <div className="mt-3 flex items-center text-xs text-slate-500 font-semibold">
+                    <ShinyText text="Commissions & baux sécurisés ✨" className="text-xs" />
+                  </div>
+               </SpotlightCard>
+
+               <div className="bg-gradient-to-br from-indigo-600 to-violet-600 p-6 rounded-[2rem] shadow-lg text-white relative overflow-hidden group cursor-pointer" onClick={handleBuyCredits}>
                   <div className="absolute right-0 top-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
                   <p className="text-indigo-100 font-bold text-xs uppercase mb-2 flex items-center"><CreditCard className="w-3 h-3 mr-1"/> Monétisation</p>
-                  <h3 className="text-3xl font-extrabold mb-1">{credits} <span className="text-lg opacity-70">Crédits</span></h3>
+                  <h3 className="text-3xl font-extrabold mb-1">
+                    <CountUp to={credits} className="font-extrabold" /> <span className="text-lg opacity-70">Crédits</span>
+                  </h3>
                   <p className="text-xs text-indigo-100 mt-2 underline opacity-0 group-hover:opacity-100 transition-opacity">Recharger maintenant</p>
                </div>
             </div>
