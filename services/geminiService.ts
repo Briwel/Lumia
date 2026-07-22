@@ -60,7 +60,7 @@ export const generatePropertyDescription = async (
     `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3.6-flash',
       contents: prompt,
     });
 
@@ -80,7 +80,7 @@ export const chatWithAssistant = async (history: { role: string; parts: { text: 
 
   try {
     const chat = ai.chats.create({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3.6-flash',
       config: {
         systemInstruction: "Tu es un assistant immobilier virtuel pour 'Lumina Immo'. Tu es poli, professionnel et expert en immobilier. Tu aides les utilisateurs à trouver des conseils sur l'achat, la location, les prêts immobiliers et la décoration. Réponds toujours en français de manière concise.",
       },
