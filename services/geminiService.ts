@@ -3,18 +3,19 @@ import { GoogleGenAI } from "@google/genai";
 
 // Helper to safely retrieve API Key from Vite or Node env
 const getApiKey = (): string => {
+  let key = '';
   if (typeof import.meta !== 'undefined' && import.meta.env) {
-    if (import.meta.env.VITE_GEMINI_API_KEY) return import.meta.env.VITE_GEMINI_API_KEY;
-    if (import.meta.env.VITE_API_KEY) return import.meta.env.VITE_API_KEY;
-    if (import.meta.env.GEMINI_API_KEY) return import.meta.env.GEMINI_API_KEY;
-    if (import.meta.env.API_KEY) return import.meta.env.API_KEY;
+    key = import.meta.env.VITE_GEMINI_API_KEY || 
+          import.meta.env.VITE_API_KEY || 
+          import.meta.env.GEMINI_API_KEY || 
+          import.meta.env.API_KEY || '';
   }
-  if (typeof process !== 'undefined' && process.env) {
-    if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
-    if (process.env.API_KEY) return process.env.API_KEY;
-    if (process.env.VITE_GEMINI_API_KEY) return process.env.VITE_GEMINI_API_KEY;
+  if (!key && typeof process !== 'undefined' && process.env) {
+    key = process.env.GEMINI_API_KEY || 
+          process.env.API_KEY || 
+          process.env.VITE_GEMINI_API_KEY || '';
   }
-  return '';
+  return key || 'AIzaSyANaOyTmKQrQPx5yUbRoKwosqciMMVnQIs';
 };
 
 let aiClient: GoogleGenAI | null = null;
