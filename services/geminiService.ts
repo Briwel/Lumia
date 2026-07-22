@@ -1,11 +1,35 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-// Fix: Always use named parameter for apiKey and obtain it directly from process.env.API_KEY
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+// Helper to safely retrieve API Key from Vite or Node env
+const getApiKey = (): string => {
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    if (import.meta.env.VITE_GEMINI_API_KEY) return import.meta.env.VITE_GEMINI_API_KEY;
+    if (import.meta.env.VITE_API_KEY) return import.meta.env.VITE_API_KEY;
+    if (import.meta.env.GEMINI_API_KEY) return import.meta.env.GEMINI_API_KEY;
+    if (import.meta.env.API_KEY) return import.meta.env.API_KEY;
+  }
+  if (typeof process !== 'undefined' && process.env) {
+    if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY;
+    if (process.env.API_KEY) return process.env.API_KEY;
+    if (process.env.VITE_GEMINI_API_KEY) return process.env.VITE_GEMINI_API_KEY;
+  }
+  return '';
+};
+
+let aiClient: GoogleGenAI | null = null;
+
+const getAiClient = (): GoogleGenAI | null => {
+  const apiKey = getApiKey();
+  if (!apiKey) return null;
+  if (!aiClient) {
+    aiClient = new GoogleGenAI({ apiKey });
+  }
+  return aiClient;
+};
 
 // Helper to check if API key exists
-export const isApiKeySet = (): boolean => !!process.env.API_KEY;
+export const isApiKeySet = (): boolean => !!getApiKey();
 
 /**
  * Generates a professional real estate description based on features.
@@ -18,8 +42,8 @@ export const generatePropertyDescription = async (
     highlights: string 
   }
 ): Promise<string> => {
-  // Fix: Direct check on process.env.API_KEY
-  if (!process.env.API_KEY) return "Veuillez configurer votre clé API pour utiliser l'IA.";
+  const ai = getAiClient();
+  if (!ai) return "Veuillez configurer la clé VITE_GEMINI_API_KEY dans votre fichier .env pour utiliser l'IA.";
 
   try {
     const prompt = `
@@ -34,13 +58,11 @@ export const generatePropertyDescription = async (
       La description doit être engageante, mettre en valeur le style de vie, et faire environ 100-150 mots. N'utilise pas de markdown, juste du texte brut avec des sauts de ligne.
     `;
 
-    // Fix: Use ai.models.generateContent to query GenAI
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-2.5-flash',
       contents: prompt,
     });
 
-    // Fix: Access .text property directly (not a method)
     return response.text || "Impossible de générer la description.";
   } catch (error) {
     console.error("Gemini Error:", error);
@@ -52,20 +74,18 @@ export const generatePropertyDescription = async (
  * Chat with the AI assistant about real estate.
  */
 export const chatWithAssistant = async (history: { role: string; parts: { text: string }[] }[], newMessage: string): Promise<string> => {
-  // Fix: Direct check on process.env.API_KEY
-  if (!process.env.API_KEY) return "Configuration API manquante.";
+  const ai = getAiClient();
+  if (!ai) return "Clé API manquante. Veuillez renseigner VITE_GEMINI_API_KEY dans votre fichier .env.";
 
   try {
     const chat = ai.chats.create({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-2.5-flash',
       config: {
         systemInstruction: "Tu es un assistant immobilier virtuel pour 'Lumina Immo'. Tu es poli, professionnel et expert en immobilier. Tu aides les utilisateurs à trouver des conseils sur l'achat, la location, les prêts immobiliers et la décoration. Réponds toujours en français de manière concise.",
       },
     });
 
-    // Fix: Use sendMessage with named parameters
     const result = await chat.sendMessage({ message: newMessage });
-    // Fix: Access .text property directly
     return result.text || "Je n'ai pas compris, pouvez-vous reformuler ?";
   } catch (error) {
     console.error("Chat Error:", error);
