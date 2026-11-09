@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Loader2, ArrowLeft, Check } from 'lucide-react';
-import { generatePropertyDescription } from '../services/geminiService';
+import { FileText, ArrowLeft, Check } from 'lucide-react';
 
 interface AddListingProps {
   onBack: () => void;
@@ -17,25 +16,6 @@ export const AddListing: React.FC<AddListingProps> = ({ onBack }) => {
     description: ''
   });
   
-  const [isGenerating, setIsGenerating] = useState(false);
-
-  const handleGenerate = async () => {
-    if (!formData.type || !formData.location || !formData.bedrooms) {
-      alert("Veuillez remplir les champs de base (Type, Localisation, Chambres) pour générer une description.");
-      return;
-    }
-
-    setIsGenerating(true);
-    const desc = await generatePropertyDescription({
-      type: formData.type === 'sale' ? 'Vente' : 'Location',
-      location: formData.location,
-      bedrooms: formData.bedrooms,
-      highlights: formData.highlights || 'Non spécifié'
-    });
-    setFormData(prev => ({ ...prev, description: desc }));
-    setIsGenerating(false);
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 mt-16">
       <div className="max-w-4xl mx-auto">
@@ -49,19 +29,19 @@ export const AddListing: React.FC<AddListingProps> = ({ onBack }) => {
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
           <div className="grid grid-cols-1 md:grid-cols-5">
             {/* Sidebar Visual */}
-            <div className="md:col-span-2 bg-indigo-600 p-8 text-white flex flex-col justify-between relative overflow-hidden">
+            <div className="md:col-span-2 bg-[#102a43] p-8 text-white flex flex-col justify-between relative overflow-hidden">
                <div className="absolute top-0 left-0 w-full h-full opacity-20">
                   <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full blur-3xl"></div>
                   <div className="absolute bottom-10 right-10 w-40 h-40 bg-violet-400 rounded-full blur-3xl"></div>
                </div>
                
                <div className="relative z-10">
-                 <div className="h-12 w-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-6 shadow-inner border border-white/20">
-                    <Sparkles className="h-6 w-6 text-white" />
+                 <div className="h-12 w-12 bg-[#c49a5a] rounded-sm flex items-center justify-center mb-6">
+                   <FileText className="h-6 w-6 text-white" />
                  </div>
-                 <h2 className="text-3xl font-extrabold mb-4 leading-tight">Vendez intelligemment avec l'IA</h2>
-                 <p className="text-indigo-100 text-sm leading-relaxed opacity-90">
-                   Remplissez les détails de base et laissez notre modèle Gemini générer une description captivante qui attirera plus d'acheteurs.
+                 <h2 className="text-3xl font-extrabold mb-4 leading-tight">Présentez votre bien avec précision.</h2>
+                 <p className="text-slate-200 text-sm leading-relaxed">
+                  Décrivez les caractéristiques essentielles de votre bien pour publier une annonce claire et attractive.
                  </p>
                </div>
 
@@ -157,32 +137,15 @@ export const AddListing: React.FC<AddListingProps> = ({ onBack }) => {
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                      <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</label>
-                     <button 
-                      type="button"
-                      onClick={handleGenerate}
-                      disabled={isGenerating}
-                      className="text-xs flex items-center px-3 py-1 bg-indigo-50 text-indigo-700 rounded-lg font-semibold hover:bg-indigo-100 transition-colors disabled:opacity-50"
-                     >
-                       {isGenerating ? <Loader2 className="h-3 w-3 mr-1.5 animate-spin"/> : <Sparkles className="h-3 w-3 mr-1.5"/>}
-                       Générer avec l'IA
-                     </button>
                   </div>
                   <div className="relative">
                      <textarea 
                       rows={6}
                       className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all font-medium text-slate-700 placeholder-slate-400 resize-none hover:bg-slate-100"
-                      placeholder="La description générée apparaîtra ici..."
+                      placeholder="Décrivez les volumes, la luminosité, les prestations et l'environnement du bien..."
                       value={formData.description}
                       onChange={e => setFormData({...formData, description: e.target.value})}
                     />
-                    {isGenerating && (
-                      <div className="absolute inset-0 bg-white/60 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                        <div className="flex flex-col items-center">
-                          <Loader2 className="h-8 w-8 text-indigo-600 animate-spin mb-2" />
-                          <span className="text-sm font-medium text-indigo-600">Rédaction en cours...</span>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
 

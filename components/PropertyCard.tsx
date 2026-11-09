@@ -1,8 +1,9 @@
 
 import React from 'react';
 import { Property } from '../types';
-import { Bed, Bath, Maximize, MapPin, Heart, ArrowUpRight, FileText, ShieldCheck, Sparkles } from 'lucide-react';
+import { Bed, Bath, Maximize, MapPin, Heart, ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { COUNTRIES } from '../constants';
+import { ScrollReveal } from './animations/ScrollReveal';
 
 interface PropertyCardProps {
   property: Property;
@@ -20,6 +21,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick })
   }).format(property.price);
 
   return (
+    <ScrollReveal className="h-full">
     <div 
       className={`group bg-white rounded-3xl overflow-hidden transition-all duration-300 cursor-pointer flex flex-col h-full transform hover:-translate-y-2 border relative ${
         isPromoted 
@@ -31,7 +33,6 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick })
       {/* Badge Sponsorisé */}
       {isPromoted && (
         <div className="absolute top-0 left-1/2 transform -translate-x-1/2 z-30 bg-amber-400 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-b-lg shadow-sm flex items-center">
-            <Sparkles className="w-3 h-3 mr-1 fill-white" />
             Sponsorisé
         </div>
       )}
@@ -47,7 +48,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick })
         
         <div className="absolute top-4 left-4 z-20 flex gap-2">
           <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide text-white shadow-lg backdrop-blur-md ${
-            property.type === 'sale' ? 'bg-indigo-600/90' : 'bg-emerald-500/90'
+            property.type === 'sale' ? 'bg-[#102a43]/90' : 'bg-emerald-700/90'
           }`}>
             {property.type === 'sale' ? 'Vente' : 'Location'}
           </span>
@@ -103,5 +104,6 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({ property, onClick })
         </div>
       </div>
     </div>
+    </ScrollReveal>
   );
 };

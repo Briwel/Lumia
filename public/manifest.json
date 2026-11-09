@@ -1,7 +1,7 @@
 {
-  "name": "Lumina Immo - Immobilier IA",
+  "name": "Lumina Immo",
   "short_name": "Lumina Immo",
-  "description": "Espace professionnel et d'administration d'annonces immobilières propulsé par l'IA",
+  "description": "Cabinet immobilier au Bénin et en France",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",

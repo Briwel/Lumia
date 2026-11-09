@@ -6,7 +6,6 @@ import {
   Building2, 
   Plus, 
   Search, 
-  Sparkles, 
   Loader2, 
   LogOut, 
   MapPin,
@@ -14,6 +13,7 @@ import {
   Users,
   Activity,
   CheckCircle,
+  BadgeCheck,
   TrendingUp,
   DollarSign,
   Upload,
@@ -29,7 +29,6 @@ import {
   Zap
 } from 'lucide-react';
 import { Property } from '../types';
-import { generatePropertyDescription } from '../services/geminiService';
 import { SpotlightCard } from './animations/SpotlightCard';
 import { ShinyText } from './animations/ShinyText';
 import { CountUp } from './animations/CountUp';
@@ -77,7 +76,6 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentName, onLog
   });
 
   const [isPublishing, setIsPublishing] = useState(false);
-  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -159,19 +157,6 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentName, onLog
           setCredits(prev => prev + parseInt(amount));
           alert("Paiement simulé accepté. Crédits ajoutés !");
       }
-  };
-
-  const handleGenerateDescription = async () => {
-    if (!formData.location || !formData.title) return;
-    setIsGenerating(true);
-    const desc = await generatePropertyDescription({
-      type: formData.type === 'sale' ? 'Vente' : 'Location',
-      location: formData.location,
-      bedrooms: formData.bedrooms || 'Non spécifié',
-      highlights: formData.features || formData.title
-    });
-    setFormData(prev => ({ ...prev, description: desc }));
-    setIsGenerating(false);
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -380,7 +365,7 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentName, onLog
                                     className="bg-amber-100 hover:bg-amber-200 text-amber-700 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all flex items-center"
                                     title={`Booster pour ${BOOST_COST} crédits`}
                                 >
-                                    <Sparkles className="w-3 h-3 mr-1.5" />
+                                    <BadgeCheck className="w-3 h-3 mr-1.5" />
                                     Booster
                                 </button>
                               )}
@@ -641,10 +626,6 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({ agentName, onLog
               <div className="mb-8">
                 <div className="flex justify-between items-center mb-2">
                   <label className="text-[10px] font-bold uppercase text-slate-400">Description marketing</label>
-                  <button onClick={handleGenerateDescription} disabled={isGenerating} className="text-[10px] font-bold text-indigo-600 flex items-center bg-indigo-50 px-3 py-1 rounded-lg hover:bg-indigo-100">
-                    {isGenerating ? <Loader2 className="h-3 w-3 animate-spin mr-1"/> : <Sparkles className="h-3 w-3 mr-1"/>}
-                    IA Gemini
-                  </button>
                 </div>
                 <textarea rows={4} className="w-full p-4 bg-slate-50 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none resize-none" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
               </div>

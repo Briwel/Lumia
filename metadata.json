@@ -1,6 +1,6 @@
 {
   "name": "Lumina Immo",
-  "description": "Plateforme immobilière moderne assistée par IA pour la recherche et la vente de biens.",
+  "description": "Cabinet immobilier dédié à la vente, la location et la gestion de biens au Bénin et en France.",
   "requestFramePermissions": [
     "geolocation"
   ],

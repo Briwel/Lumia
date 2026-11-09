@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, User, ArrowRight, Building2, Sparkles, Loader2, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, Building2, Loader2, CheckCircle2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import api from '../services/api';
 
@@ -74,17 +74,17 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 pt-24">
+    <div className="min-h-screen bg-stone-50 flex items-center justify-center p-4 pt-24">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="max-w-5xl w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-slate-100 min-h-[600px]"
+        className="max-w-5xl w-full bg-white rounded-sm shadow-2xl overflow-hidden flex flex-col md:flex-row border border-stone-200 min-h-[600px]"
       >
         
         {/* Côté Gauche : Visuel & Infos */}
-        <div className="md:w-1/2 bg-slate-900 p-12 text-white relative overflow-hidden flex flex-col justify-between">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
+        <div className="md:w-1/2 bg-[#102a43] p-12 text-white relative overflow-hidden flex flex-col justify-between">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#c49a5a]/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
           
           <div className="relative z-10">
             <button onClick={onBack} className="flex items-center text-slate-400 hover:text-white mb-12 transition-colors font-bold group">
@@ -95,7 +95,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
               initial={{ rotate: -10, scale: 0.9 }}
               animate={{ rotate: 0, scale: 1 }}
               transition={{ delay: 0.2, type: 'spring' }}
-              className="h-12 w-12 bg-indigo-600 rounded-xl flex items-center justify-center mb-6 shadow-lg"
+              className="h-12 w-12 bg-[#c49a5a] rounded-sm flex items-center justify-center mb-6 shadow-lg"
             >
               <Building2 className="w-6 h-6" />
             </motion.div>
@@ -106,7 +106,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
               className="text-4xl font-extrabold mb-6 leading-tight"
             >
               Propulsez votre agence <br/>
-              <span className="text-indigo-400">avec Lumina IA</span>
+              <span className="text-[#d9b77a]">avec Lumina Immo</span>
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0 }}
@@ -114,7 +114,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
               transition={{ delay: 0.3, duration: 0.6 }}
               className="text-slate-400 text-lg leading-relaxed mb-8"
             >
-              Gérez vos mandats, générez des descriptions automatiques et suivez vos ventes sur une interface unique.
+              Gérez vos mandats, publiez vos biens et suivez vos ventes depuis un espace unique.
             </motion.p>
           </div>
 
@@ -125,8 +125,8 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
               transition={{ delay: 0.4 }}
               className="flex items-center space-x-3 text-sm font-medium text-slate-300"
             >
-              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-              <span>Génération d'annonces par IA</span>
+              <CheckCircle2 className="w-5 h-5 text-[#d9b77a]" />
+              <span>Gestion professionnelle des annonces</span>
             </motion.div>
             <motion.div 
               initial={{ opacity: 0, x: -10 }}
@@ -134,7 +134,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
               transition={{ delay: 0.5 }}
               className="flex items-center space-x-3 text-sm font-medium text-slate-300"
             >
-              <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+              <CheckCircle2 className="w-5 h-5 text-[#d9b77a]" />
               <span>Pilotage de votre activité</span>
             </motion.div>
           </div>
@@ -154,7 +154,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
                   exit={{ opacity: 0, y: 10 }}
                   transition={{ duration: 0.25 }}
                 >
-                  <h3 className="text-3xl font-bold text-slate-900 mb-2">
+                  <h3 className="text-3xl font-semibold text-[#102a43] mb-2">
                     {isLogin ? 'Bon retour !' : 'Rejoindre Lumina'}
                   </h3>
                   <p className="text-slate-500 font-medium">
@@ -196,7 +196,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
                           type="text" 
                           required={!isLogin}
                           placeholder="Votre nom complet"
-                          className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-600 focus:bg-white outline-none transition-all font-medium"
+                          className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-sm focus:ring-2 focus:ring-[#c49a5a] focus:bg-white outline-none transition-all font-medium"
                           value={formData.name}
                           onChange={e => setFormData({...formData, name: e.target.value})}
                         />
@@ -207,7 +207,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
                           type="text" 
                           required={!isLogin}
                           placeholder="Nom de l'agence"
-                          className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-600 focus:bg-white outline-none transition-all font-medium"
+                          className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-sm focus:ring-2 focus:ring-[#c49a5a] focus:bg-white outline-none transition-all font-medium"
                           value={formData.agencyName}
                           onChange={e => setFormData({...formData, agencyName: e.target.value})}
                         />
@@ -222,7 +222,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
                     type="email" 
                     required
                     placeholder="Adresse email"
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-600 focus:bg-white outline-none transition-all font-medium"
+                    className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-sm focus:ring-2 focus:ring-[#c49a5a] focus:bg-white outline-none transition-all font-medium"
                     value={formData.email}
                     onChange={e => setFormData({...formData, email: e.target.value})}
                   />
@@ -234,7 +234,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
                     type="password" 
                     required
                     placeholder="Mot de passe"
-                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-indigo-600 focus:bg-white outline-none transition-all font-medium"
+                    className="w-full pl-12 pr-4 py-4 bg-stone-50 border border-stone-200 rounded-sm focus:ring-2 focus:ring-[#c49a5a] focus:bg-white outline-none transition-all font-medium"
                     value={formData.password}
                     onChange={e => setFormData({...formData, password: e.target.value})}
                   />
@@ -246,7 +246,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
                 disabled={isLoading}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 rounded-2xl font-bold shadow-xl shadow-indigo-600/20 transition-all flex items-center justify-center group"
+                className="w-full bg-[#102a43] hover:bg-[#183d5b] text-white py-4 rounded-sm font-bold shadow-xl transition-all flex items-center justify-center group"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin mr-2" />
@@ -264,7 +264,7 @@ export const AgentAuth: React.FC<AgentAuthProps> = ({ onLoginSuccess, onBack }) 
                 {isLogin ? "Nouveau ici ?" : "Déjà un compte ?"}
                 <button 
                   onClick={() => { setIsLogin(!isLogin); setError(''); }}
-                  className="ml-2 text-indigo-600 font-bold hover:underline transition-colors focus:outline-none"
+                  className="ml-2 text-[#b48642] font-bold hover:underline transition-colors focus:outline-none"
                 >
                   {isLogin ? "S'inscrire" : "Se connecter"}
                 </button>

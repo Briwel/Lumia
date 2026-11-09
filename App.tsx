@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Layout } from './components/Layout';
 import { PropertyCard } from './components/PropertyCard';
-import { AIChat } from './components/AIChat';
+import { ScrollReveal } from './components/animations/ScrollReveal';
 import { AgentDashboard } from './components/AgentDashboard';
 import { AgentAuth } from './components/AgentAuth';
 import { SuperAdminDashboard } from './components/super-admin/SuperAdminDashboard';
@@ -32,12 +32,10 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { Property, CountryCode } from './types';
-import { BlurText } from './components/animations/BlurText';
 
 const App: React.FC = () => {
   const [activeView, setActiveView] = useState<'welcome' | 'home' | 'add' | 'details' | 'agent'>('welcome');
   const [currentCountry, setCurrentCountry] = useState<CountryCode>('BJ');
-  const [isChatOpen, setIsChatOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState<'all' | 'sale' | 'rent'>('all');
@@ -168,94 +166,92 @@ const App: React.FC = () => {
 
   const renderHome = () => (
     <>
-      <div className="relative h-[650px] flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[700px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="/src/assets/images/lumina_hero_1780162841140.png" 
-            alt="Hero" 
+          <img
+            src="/src/assets/images/lumina_hero_1780162841140.png"
+            alt="Hero"
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-900/50 to-slate-50"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#102a43]/90 via-[#102a43]/65 to-[#102a43]/20"></div>
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-4 text-center mt-10">
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-8 text-white tracking-tight leading-tight flex flex-col items-center justify-center">
-            <BlurText 
-              text="Réinventez votre recherche" 
-              animateBy="words" 
-              direction="bottom" 
-              duration={0.6}
-              stagger={0.1}
-            />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400 mt-2">
-              <BlurText 
-                text={`${currentCountry === 'BJ' ? 'au' : 'en'} ${countryConfig.name}`} 
-                animateBy="letters" 
-                direction="bottom" 
-                duration={0.8}
-                stagger={0.04}
-                delay={400}
-              />
-            </span>
-          </h1>
-          
-          <div className="bg-white/95 backdrop-blur-xl p-3 rounded-3xl shadow-2xl shadow-indigo-900/20 flex flex-col md:flex-row gap-3 max-w-2xl mx-auto transform transition-all hover:scale-[1.01]">
-            <div className="flex-grow flex items-center bg-slate-50 rounded-xl px-6 py-4 border border-slate-100 focus-within:ring-2 focus-within:ring-indigo-500/20 transition-all">
-              <Search className="h-6 w-6 text-indigo-500 mr-3 flex-shrink-0" />
-              <input 
-                type="text" 
-                placeholder="Quel type de bien recherchez-vous ? (Villa...)" 
-                className="bg-transparent w-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none text-lg"
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-24 md:pt-28">
+          <div className="max-w-2xl text-left">
+            <p className="text-[#d9b77a] uppercase tracking-[0.3em] text-xs font-bold mb-6">
+              Cabinet immobilier · {countryConfig.name}
+            </p>
+            <h1 className="text-5xl md:text-7xl font-semibold mb-6 text-white tracking-tight leading-[1.05]">
+              Des lieux qui donnent<br /><span className="text-[#d9b77a]">du sens à vos projets.</span>
+            </h1>
+            <p className="text-lg md:text-xl text-slate-200 leading-relaxed max-w-xl mb-10">
+              Une sélection exigeante de biens et un accompagnement attentif, de la première visite à la signature.
+            </p>
+          </div>
+
+          <div className="bg-white p-2 rounded-sm shadow-2xl flex flex-col md:flex-row gap-2 w-full max-w-3xl">
+            <div className="flex-grow flex items-center bg-stone-50 px-5 py-3 border border-stone-200 focus-within:ring-2 focus-within:ring-amber-500/30 transition-all">
+              <Search className="h-5 w-5 text-[#c49a5a] mr-3 flex-shrink-0" />
+              <input
+                type="text"
+                placeholder="Quel type de bien recherchez-vous ? (Villa...)"
+                className="bg-transparent w-full text-slate-900 font-medium placeholder-slate-400 focus:outline-none"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg hover:shadow-indigo-500/30 flex items-center justify-center min-w-[160px]">
+            <button className="bg-[#102a43] hover:bg-[#183d5b] text-white px-8 py-4 rounded-sm font-bold transition-all flex items-center justify-center min-w-[160px]">
               Rechercher
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Biens à la une</h2>
-            <p className="text-slate-500">Sélection exclusive en {countryConfig.name} {detectedCity ? `proche de ${detectedCity}` : ''}</p>
-          </div>
-          <div className="flex gap-2">
-            {['all', 'sale', 'rent'].map((t) => (
-              <button 
-                key={t}
-                onClick={() => setFilterType(t as any)}
-                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${filterType === t ? 'bg-indigo-600 text-white' : 'bg-white text-slate-500 border border-slate-200 hover:bg-slate-50'}`}
-              >
-                {t === 'all' ? 'Tout' : t === 'sale' ? 'Vente' : 'Location'}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="h-12 w-12 text-indigo-600 animate-spin mb-4" />
-            <p className="text-slate-500 font-medium">Chargement des offres en cours...</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-            {filteredProperties.length > 0 ? (
-              filteredProperties.map(property => (
-                <PropertyCard key={property.id} property={property} onClick={() => handlePropertyClick(property)} />
-              ))
-            ) : (
-              <div className="col-span-full py-20 text-center text-slate-400">
-                Aucun bien disponible pour le moment.
+      <section className="bg-stone-50 py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-10">
+              <div>
+                <h2 className="text-3xl font-bold text-slate-900 mb-2">Biens à la une</h2>
+                <p className="text-slate-500">
+                  Sélection exclusive en {countryConfig.name} {detectedCity ? `proche de ${detectedCity}` : ''}
+                </p>
               </div>
-            )}
-          </div>
-        )}
-      </div>
+              <div className="flex flex-wrap gap-2">
+                {['all', 'sale', 'rent'].map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setFilterType(t as any)}
+                    className={`px-4 py-2 rounded-sm text-sm font-bold transition-all ${filterType === t ? 'bg-[#102a43] text-white' : 'bg-white text-slate-500 border border-stone-200 hover:bg-stone-100'}`}
+                  >
+                    {t === 'all' ? 'Tout' : t === 'sale' ? 'Vente' : 'Location'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </ScrollReveal>
+
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20">
+              <Loader2 className="h-12 w-12 text-[#102a43] animate-spin mb-4" />
+              <p className="text-slate-500 font-medium">Chargement des offres en cours...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-10">
+              {filteredProperties.length > 0 ? (
+                filteredProperties.map((property) => (
+                  <PropertyCard key={property.id} property={property} onClick={() => handlePropertyClick(property)} />
+                ))
+              ) : (
+                <div className="col-span-full py-20 text-center text-slate-400">
+                  Aucun bien disponible pour le moment.
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
     </>
   );
 
@@ -281,7 +277,7 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100">
+              <ScrollReveal className="bg-white rounded-[2.5rem] p-10 shadow-sm border border-slate-100">
                 <div className="flex gap-2 mb-6">
                    <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white ${isRent ? 'bg-emerald-500' : 'bg-indigo-600'}`}>{isRent ? 'Location' : 'Vente'}</span>
                 </div>
@@ -366,7 +362,7 @@ const App: React.FC = () => {
                   </div>
                 )}
 
-              </div>
+              </ScrollReveal>
             </div>
 
             <div className="lg:col-span-1 space-y-6">
@@ -405,7 +401,6 @@ const App: React.FC = () => {
     <Layout 
       activeView={activeView} 
       onChangeView={setActiveView}
-      onOpenChat={() => setIsChatOpen(true)}
       currentCountry={currentCountry}
     >
       {activeView === 'welcome' && (
@@ -418,7 +413,6 @@ const App: React.FC = () => {
             setActiveView('agent');
             window.scrollTo(0, 0);
           }} 
-          onOpenChat={() => setIsChatOpen(true)}
           currentCountry={currentCountry}
         />
       )}
@@ -431,8 +425,6 @@ const App: React.FC = () => {
             ? <SuperAdminDashboard adminName={agentName} onLogout={handleLogout} />
             : <AgentDashboard agentName={agentName} onLogout={handleLogout} />
       )}
-      <AIChat isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
-
       {/* MODAL DE CONTACT */}
       {isContactModalOpen && (
           <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
