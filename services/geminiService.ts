@@ -1,6 +1,8 @@
 
 import { GoogleGenAI } from "@google/genai";
 
+const GEMINI_MODEL = 'gemini-2.5-flash';
+
 // Helper to safely retrieve API Key from Vite or Node env
 const getApiKey = (): string => {
   let key = '';
@@ -15,7 +17,7 @@ const getApiKey = (): string => {
           process.env.API_KEY || 
           process.env.VITE_GEMINI_API_KEY || '';
   }
-  return key || 'AIzaSyANaOyTmKQrQPx5yUbRoKwosqciMMVnQIs';
+  return key;
 };
 
 let aiClient: GoogleGenAI | null = null;
@@ -60,7 +62,7 @@ export const generatePropertyDescription = async (
     `;
 
     const response = await ai.models.generateContent({
-      model: 'gemini-3.6-flash',
+      model: GEMINI_MODEL,
       contents: prompt,
     });
 
@@ -80,7 +82,8 @@ export const chatWithAssistant = async (history: { role: string; parts: { text: 
 
   try {
     const chat = ai.chats.create({
-      model: 'gemini-3.6-flash',
+      model: GEMINI_MODEL,
+      history,
       config: {
         systemInstruction: "Tu es un assistant immobilier virtuel pour 'Lumina Immo'. Tu es poli, professionnel et expert en immobilier. Tu aides les utilisateurs à trouver des conseils sur l'achat, la location, les prêts immobiliers et la décoration. Réponds toujours en français de manière concise.",
       },
